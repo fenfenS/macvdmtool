@@ -244,6 +244,18 @@ int DoActions(HPMPluginInstance &inst, int no) {
     return 0;
 }
 
+int DoDebug(HPMPluginInstance &inst, int no)
+{
+    printf("Putting target into serial mode... ");
+
+    std::vector<uint32_t> debug{0x5ac8012, 0x1824606};
+    DoVDM(inst, no, debug);
+
+    printf("OK\n");
+
+    return 0;
+}
+
 int DoSerial(HPMPluginInstance &inst, int no)
 {
     printf("Putting target into serial mode... ");
@@ -329,6 +341,7 @@ int main2(int argc, char **argv)
         printf("  dfu - put the target into DFU mode\n");
         printf("  nop - do nothing\n");
         printf("  actions - get supported actions\n");
+        printf("  debug - get debug usb\n");
         return 1;
     }
 
@@ -382,6 +395,8 @@ int main2(int argc, char **argv)
         return 0;
     else if (cmd == "actions")
         return DoActions(*inst, no);
+    else if (cmd == "debug")
+        return DoDebug(*inst, no);
 
     printf("Unknown command\n");
     return 1;
