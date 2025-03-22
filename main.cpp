@@ -244,12 +244,30 @@ int DoActions(HPMPluginInstance &inst, int no) {
     return 0;
 }
 
-int DoDebug(HPMPluginInstance &inst, int no)
+int DoDebug1(HPMPluginInstance &inst, int no)
 {
     printf("Putting target into serial mode... ");
 
-    std::vector<uint32_t> debug{0x5ac8012, 0x1824606};
+    std::vector<uint32_t> debug{0x5ac8012, 0x814606};
     DoVDM(inst, no, debug);
+
+    std::vector<uint32_t> usb{0x5ac8012, 0x820606};
+    DoVDM(inst, no, usb);
+
+    printf("OK\n");
+
+    return 0;
+}
+
+int DoDebug2(HPMPluginInstance &inst, int no)
+{
+    printf("Putting target into serial mode... ");
+
+    std::vector<uint32_t> debug{0x5ac8012, 0x824606};
+    DoVDM(inst, no, debug);
+
+    std::vector<uint32_t> usb{0x5ac8012, 0x810606};
+    DoVDM(inst, no, usb);
 
     printf("OK\n");
 
@@ -395,8 +413,10 @@ int main2(int argc, char **argv)
         return 0;
     else if (cmd == "actions")
         return DoActions(*inst, no);
-    else if (cmd == "debug")
-        return DoDebug(*inst, no);
+    else if (cmd == "debug1")
+        return DoDebug1(*inst, no);
+    else if (cmd == "debug2")
+        return DoDebug2(*inst, no);
 
     printf("Unknown command\n");
     return 1;
